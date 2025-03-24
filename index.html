@@ -24,16 +24,14 @@
             max-width: 500px;
             text-align: center;
         }
-        .container li{
+        .container li {
             text-align: left;
             margin-left: 20px;
         }
-
-        .container p{
+        .container p {
             font-weight: bold;
             font-size: 1.2rem;
         }
-
         h1 {
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
@@ -83,6 +81,18 @@
         .error {
             color: #e74c3c;
         }
+        .footer {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +113,9 @@
         </div>
         <button onclick="parseXML()" id="parseButton" disabled>Parse XML</button>
         <div id="status">Select a file to begin</div>
+        <div class="footer">
+            By <a href="https://cortexagent.com" target="_blank">CortexAgent LLC</a>
+        </div>
     </div>
 
     <script>
