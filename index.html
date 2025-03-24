@@ -6,36 +6,57 @@
     <title>WordPress XML Parser</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f7fa;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: #333;
+            color: #fff;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             text-align: center;
+            margin-top: 80px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .container li {
             text-align: left;
             margin-left: 20px;
+            color: #e0e0e0;
         }
         .container p {
             font-weight: bold;
             font-size: 1.2rem;
-        }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
+            color: #fff;
         }
         .file-input-wrapper {
             position: relative;
@@ -46,48 +67,70 @@
         }
         .file-input-wrapper label {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: #3498db;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
             color: white;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
         }
         .file-input-wrapper label:hover {
-            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+            transition: background 0.3s;
+        }
+        select:hover, select:focus {
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
         }
         button {
-            padding: 0.75rem 1.5rem;
-            background-color: #2ecc71;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(45deg, #00d4ff, #00b4d8);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
         }
         button:hover {
-            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.6);
         }
         button:disabled {
-            background-color: #bdc3c7;
+            background: #666;
             cursor: not-allowed;
+            box-shadow: none;
         }
         #status {
             margin-top: 1rem;
             font-size: 0.9rem;
-            color: #7f8c8d;
+            color: #e0e0e0;
         }
         .error {
-            color: #e74c3c;
+            color: #ff6b6b;
         }
         .footer {
             margin-top: 1.5rem;
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: #e0e0e0;
         }
         .footer a {
-            color: #3498db;
+            color: #00d4ff;
             text-decoration: none;
         }
         .footer a:hover {
@@ -96,21 +139,35 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="14" fill="#00d4ff"/>
+                <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 2.5c6.351 0 11.5 5.149 11.5 11.5S22.351 27.5 16 27.5 4.5 22.351 4.5 16 9.649 4.5 16 4.5zm-5.5 7.5v8h2v-8h-2zm4 0v8h2v-8h-2zm4.5 0c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5-1.567-3.5-3.5-3.5z" fill="#fff"/>
+            </svg>
+            WordPress XML Parser
+        </h1>
+    </div>
     <div class="container">
-        <h1>WordPress XML Parser</h1>
         <div class="instructions">
             <p>Extract URLs from your WordPress export file with ease:</p>
             <ul>
                 <li>Export your site’s content from WordPress (Tools → Export → All Content).</li>
                 <li>Click "Choose XML File" to upload your .xml file.</li>
+                <li>Select content type (e.g., posts, pages) from the dropdown.</li>
                 <li>Click "Parse XML" to process the file.</li>
-                <li>Download a CSV with URLs, titles, types (post/page), and HubSpot module detection.</li>
+                <li>Download a CSV with URLs, titles, types, and HubSpot module detection.</li>
             </ul>
         </div>
         <div class="file-input-wrapper">
             <input type="file" id="xmlFile" accept=".xml">
             <label for="xmlFile">Choose XML File</label>
         </div>
+        <select id="contentType">
+            <option value="all">All Content Types</option>
+            <option value="post">Posts Only</option>
+            <option value="page">Pages Only</option>
+        </select>
         <button onclick="parseXML()" id="parseButton" disabled>Parse XML</button>
         <div id="status">Select a file to begin</div>
         <div class="footer">
@@ -122,6 +179,7 @@
         const fileInput = document.getElementById('xmlFile');
         const parseButton = document.getElementById('parseButton');
         const status = document.getElementById('status');
+        const contentTypeSelect = document.getElementById('contentType');
 
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
@@ -147,6 +205,7 @@
                 return;
             }
 
+            const selectedType = contentTypeSelect.value;
             status.textContent = 'Parsing...';
             status.classList.remove('error');
             parseButton.disabled = true;
@@ -168,12 +227,12 @@
 
                 for (let item of items) {
                     const postType = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/', 'post_type')[0]?.textContent;
-                    const status = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/', 'status')[0]?.textContent;
+                    const statusEl = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/', 'status')[0]?.textContent;
                     const url = item.getElementsByTagName('link')[0]?.textContent;
                     const title = item.getElementsByTagName('title')[0]?.textContent || '';
                     const content = item.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0]?.textContent || '';
 
-                    if (status === 'publish' && (postType === 'post' || postType === 'page')) {
+                    if (statusEl === 'publish' && (selectedType === 'all' || postType === selectedType)) {
                         const hasHubspot = hubspotPattern.test(content) ? 'Yes' : 'No';
                         csvRows.push(arrayToCSV([url, title, postType, hasHubspot]));
                     }
