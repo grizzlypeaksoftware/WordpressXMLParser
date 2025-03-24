@@ -249,7 +249,7 @@ URL,Title,Type,Has_HubSpot_Module
 ```
 
 #### Try It Out
-I’ve open-sourced this on GitHub: [https://github.com/grizzlypeaksoftware/WordpressXMLParser](https://github.com/grizzlypeaksoftware/WordpressXMLParser). Clone it, open `index.html` in your browser, and follow the on-page instructions. For a live demo, check [your-hosted-link](#) (update this once hosted, e.g., via GitHub Pages).
+I’ve open-sourced this on GitHub: [https://github.com/grizzlypeaksoftware/WordpressXMLParser](https://github.com/grizzlypeaksoftware/WordpressXMLParser). Clone it, open `index.html` in your browser, and follow the on-page instructions. For a live demo, check [https://grizzlypeaksoftware.github.io/WordpressXMLParser/](Wordpress XML Parser) (update this once hosted, e.g., via GitHub Pages).
 
 #### Pros and Cons
 **Pros**:
