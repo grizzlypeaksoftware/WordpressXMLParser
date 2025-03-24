@@ -1,8 +1,4 @@
-Here’s the rewritten article reflecting your updated styling changes to the HTML page. The article incorporates your modifications—specifically the bolded paragraph, left-aligned list items with a margin, and the overall design tweaks—while keeping the content engaging and informative for your technical blog.
-
----
-
-### Parsing WordPress Export Files in the Browser: A Stylish JavaScript Tool with Clear Guidance
+## Parsing WordPress Export Files in the Browser: A Stylish JavaScript Tool with Clear Guidance
 
 WordPress’s XML export (WXR) is a fantastic way to back up or analyze your site’s content, but transforming that XML into a CSV file often feels like a chore reserved for server-side wizards. What if you could do it right in your browser with a tool that’s both powerful and visually appealing? In this post, I’ll walk you through a JavaScript solution that parses WordPress XML exports, generates a CSV with URLs, titles, types, and HubSpot module detection, and features a sleek design with step-by-step instructions. I’ve also shared it on GitHub for you to try out!
 
@@ -239,8 +235,8 @@ Here’s the full solution, styled with CSS to look sharp and intuitive:
 For an export item like:
 ```xml
 <item>
-    <title>Taking Referral Marketing Online</title>
-    <link>https://getambassador.com/blog/taking-referral-marketing-online/</link>
+    <title>Sample Blog Post</title>
+    <link>https://example.com/blog/sample-blog-post/</link>
     <wp:post_type>post</wp:post_type>
     <wp:status>publish</wp:status>
     <content:encoded><![CDATA[No HubSpot here...]]></content:encoded>
@@ -249,11 +245,11 @@ For an export item like:
 The CSV becomes:
 ```
 URL,Title,Type,Has_HubSpot_Module
-"https://getambassador.com/blog/taking-referral-marketing-online/","Taking Referral Marketing Online","post","No"
+"https://example.com/blog/sample-blog-post/","Sample Blog Post","post","No"
 ```
 
 #### Try It Out
-I’ve open-sourced this on GitHub: [github.com/grizzlypeaksoftware/wordpress-xml-parser](https://github.com/yourusername/wordpress-xml-parser). Clone it, open `index.html` in your browser, and follow the on-page instructions. For a live demo, check [your-hosted-link](#) (update this once hosted, e.g., via GitHub Pages).
+I’ve open-sourced this on GitHub: [https://github.com/grizzlypeaksoftware/WordpressXMLParser](https://github.com/grizzlypeaksoftware/WordpressXMLParser). Clone it, open `index.html` in your browser, and follow the on-page instructions. For a live demo, check [your-hosted-link](#) (update this once hosted, e.g., via GitHub Pages).
 
 #### Pros and Cons
 **Pros**:
