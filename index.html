@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress XML Parser</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .container li{
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .container p{
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+        .file-input-wrapper label {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-input-wrapper label:hover {
+            background-color: #2980b9;
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WordPress XML Parser</h1>
+        <div class="instructions">
+            <p>Extract URLs from your WordPress export file with ease:</p>
+            <ul>
+                <li>Export your site’s content from WordPress (Tools → Export → All Content).</li>
+                <li>Click "Choose XML File" to upload your .xml file.</li>
+                <li>Click "Parse XML" to process the file.</li>
+                <li>Download a CSV with URLs, titles, types (post/page), and HubSpot module detection.</li>
+            </ul>
+        </div>
+        <div class="file-input-wrapper">
+            <input type="file" id="xmlFile" accept=".xml">
+            <label for="xmlFile">Choose XML File</label>
+        </div>
+        <button onclick="parseXML()" id="parseButton" disabled>Parse XML</button>
+        <div id="status">Select a file to begin</div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('xmlFile');
+        const parseButton = document.getElementById('parseButton');
+        const status = document.getElementById('status');
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                parseButton.disabled = false;
+                status.textContent = `File selected: ${fileInput.files[0].name}`;
+            } else {
+                parseButton.disabled = true;
+                status.textContent = 'Select a file to begin';
+            }
+        });
+
+        function arrayToCSV(arr) {
+            return arr.map(item => `"${item.replace(/"/g, '""')}"`).join(',');
+        }
+
+        const hubspotPattern = /{%\s*module_block\s+module\s+["“][^"”]+["”]\s*%}.*?{%\s*end_module_block\s*%}/;
+
+        function parseXML() {
+            const file = fileInput.files[0];
+            if (!file) {
+                status.textContent = 'Please select an XML file';
+                status.classList.add('error');
+                return;
+            }
+
+            status.textContent = 'Parsing...';
+            status.classList.remove('error');
+            parseButton.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(e.target.result, 'text/xml');
+                const parserError = xmlDoc.getElementsByTagName('parsererror')[0];
+                if (parserError) {
+                    status.textContent = 'Error: Invalid XML file';
+                    status.classList.add('error');
+                    parseButton.disabled = false;
+                    return;
+                }
+
+                const items = xmlDoc.getElementsByTagName('item');
+                const csvRows = ['URL,Title,Type,Has_HubSpot_Module'];
+
+                for (let item of items) {
+                    const postType = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/', 'post_type')[0]?.textContent;
+                    const status = item.getElementsByTagNameNS('http://wordpress.org/export/1.2/', 'status')[0]?.textContent;
+                    const url = item.getElementsByTagName('link')[0]?.textContent;
+                    const title = item.getElementsByTagName('title')[0]?.textContent || '';
+                    const content = item.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0]?.textContent || '';
+
+                    if (status === 'publish' && (postType === 'post' || postType === 'page')) {
+                        const hasHubspot = hubspotPattern.test(content) ? 'Yes' : 'No';
+                        csvRows.push(arrayToCSV([url, title, postType, hasHubspot]));
+                    }
+                }
+
+                const csvContent = csvRows.join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'wordpress_urls.csv';
+                link.click();
+
+                status.textContent = 'CSV downloaded successfully!';
+                parseButton.disabled = false;
+            };
+            reader.onerror = function() {
+                status.textContent = 'Error reading file';
+                status.classList.add('error');
+                parseButton.disabled = false;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
